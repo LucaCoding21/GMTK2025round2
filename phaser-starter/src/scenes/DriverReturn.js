@@ -15,11 +15,15 @@ export default class DriverReturn extends Phaser.Scene {
     // Create background
     this.createBackground();
     
+    // Create driver animations
+    this.createDriverAnimations();
+    
     // Create passengers
     this.createPassengers();
     
     // Create driver
-    this.driver = this.add.image(250, 250, "driver").setOrigin(0.5);
+    this.driver = this.add.sprite(250, 250, "driver").setOrigin(0.5).setScale(2);
+    this.driver.play("driver_idle_down");
     
     // Create status text
     this.statusText = this.add.text(625, 50, "Returning to driver's seat...", {
@@ -58,18 +62,86 @@ export default class DriverReturn extends Phaser.Scene {
     this.background.setDepth(0);
   }
   
+  createDriverAnimations(){
+    // Create driver idle animations for each direction using frames from the first row (row 0)
+    // Frames 0-29 are in the first row, we want frames 0, 1, 2, 3 for the 4 directions
+    
+    this.anims.create({
+      key: "driver_idle_right",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [0] }), // First frame of first row
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "driver_idle_up",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [1] }), // Second frame of first row
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "driver_idle_left",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [2] }), // Third frame of first row
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "driver_idle_down",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [3] }), // Fourth frame of first row
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    // Create driver walking animations from row 2
+    // Row 2 starts at frame 112
+    // Walking right: frames 112-117 (6 frames)
+    // Walking up: frames 118-123 (6 frames) - SWAPPED
+    // Walking left: frames 124-129 (6 frames)
+    // Walking down: frames 130-135 (6 frames) - SWAPPED
+    
+    this.anims.create({
+      key: "driver_walk_right",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [112, 113, 114, 115, 116, 117] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "driver_walk_up",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [118, 119, 120, 121, 122, 123] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "driver_walk_left",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [124, 125, 126, 127, 128, 129] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "driver_walk_down",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [130, 131, 132, 133, 134, 135] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+  }
+  
   createPassengers(){
     this.passengerSprites = [];
     this.runState.passengers.forEach(passenger => {
       const seat = BUS_SEATS[passenger.seatIndex];
       
-      // Create passenger sprite using the same kid.png spritesheet
-      const sprite = this.add.sprite(seat.x, seat.y, "player")
-        .setScale(2) // Same scale as player
+      // Create passenger sprite using the passenger spritesheet (kid.png)
+      const sprite = this.add.sprite(seat.x, seat.y, "passenger")
+        .setScale(2) // Same scale as driver
         .setData("passenger", passenger);
       
       // Set initial idle animation (facing down)
-      sprite.play("player_idle_down");
+      sprite.play("passenger_idle_down");
       
       this.passengerSprites.push(sprite);
     });

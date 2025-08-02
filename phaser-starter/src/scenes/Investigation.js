@@ -25,8 +25,8 @@ export default class Investigation extends Phaser.Scene {
     this.createPlayerAnimations();
     
     // Create driver with movement
-    this.driver = this.add.sprite(250, 250, "player").setOrigin(0.5).setScale(2);
-    this.driver.play("player_idle_right");
+    this.driver = this.add.sprite(250, 250, "driver").setOrigin(0.5).setScale(2);
+    this.driver.play("driver_idle_right");
     this.cursors = this.input.keyboard.createCursorKeys();
     
     // Create passengers
@@ -80,38 +80,38 @@ export default class Investigation extends Phaser.Scene {
   }
   
   createPlayerAnimations(){
-    // Create idle animations for each direction using frames from the first row (row 0)
+    // Create driver idle animations for each direction using frames from the first row (row 0)
     // Frames 0-29 are in the first row, we want frames 0, 1, 2, 3 for the 4 directions
     
     this.anims.create({
-      key: "player_idle_right",
-      frames: this.anims.generateFrameNumbers("player", { frames: [0] }), // First frame of first row
+      key: "driver_idle_right",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [0] }), // First frame of first row
       frameRate: 1,
       repeat: -1
     });
     
     this.anims.create({
-      key: "player_idle_up",
-      frames: this.anims.generateFrameNumbers("player", { frames: [1] }), // Second frame of first row
+      key: "driver_idle_up",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [1] }), // Second frame of first row
       frameRate: 1,
       repeat: -1
     });
     
     this.anims.create({
-      key: "player_idle_left",
-      frames: this.anims.generateFrameNumbers("player", { frames: [2] }), // Third frame of first row
+      key: "driver_idle_left",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [2] }), // Third frame of first row
       frameRate: 1,
       repeat: -1
     });
     
     this.anims.create({
-      key: "player_idle_down",
-      frames: this.anims.generateFrameNumbers("player", { frames: [3] }), // Fourth frame of first row
+      key: "driver_idle_down",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [3] }), // Fourth frame of first row
       frameRate: 1,
       repeat: -1
     });
     
-    // Create walking animations from row 2
+    // Create driver walking animations from row 2
     // Row 2 starts at frame 112
     // Walking right: frames 112-117 (6 frames)
     // Walking up: frames 118-123 (6 frames) - SWAPPED
@@ -119,37 +119,107 @@ export default class Investigation extends Phaser.Scene {
     // Walking down: frames 130-135 (6 frames) - SWAPPED
     
     // Debug: Log animation creation
-    console.log("Creating walking animations...");
+    console.log("Creating driver walking animations...");
     
     this.anims.create({
-      key: "player_walk_right",
-      frames: this.anims.generateFrameNumbers("player", { frames: [112, 113, 114, 115, 116, 117] }),
+      key: "driver_walk_right",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [112, 113, 114, 115, 116, 117] }),
       frameRate: 12, // Increased for smoother animation
       repeat: -1
     });
     
     this.anims.create({
-      key: "player_walk_up",
-      frames: this.anims.generateFrameNumbers("player", { frames: [118, 119, 120, 121, 122, 123] }),
+      key: "driver_walk_up",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [118, 119, 120, 121, 122, 123] }),
       frameRate: 12, // Increased for smoother animation
       repeat: -1
     });
     
     this.anims.create({
-      key: "player_walk_left",
-      frames: this.anims.generateFrameNumbers("player", { frames: [124, 125, 126, 127, 128, 129] }),
+      key: "driver_walk_left",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [124, 125, 126, 127, 128, 129] }),
       frameRate: 12, // Increased for smoother animation
       repeat: -1
     });
     
     this.anims.create({
-      key: "player_walk_down",
-      frames: this.anims.generateFrameNumbers("player", { frames: [130, 131, 132, 133, 134, 135] }),
+      key: "driver_walk_down",
+      frames: this.anims.generateFrameNumbers("driver", { frames: [130, 131, 132, 133, 134, 135] }),
       frameRate: 12, // Increased for smoother animation
       repeat: -1
     });
     
-    console.log("Walking animations created!");
+    console.log("Driver walking animations created!");
+    
+    // Create passenger idle animations for each direction using frames from the first row (row 0)
+    // Frames 0-29 are in the first row, we want frames 0, 1, 2, 3 for the 4 directions
+    
+    this.anims.create({
+      key: "passenger_idle_right",
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [0] }), // First frame of first row
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "passenger_idle_up",
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [1] }), // Second frame of first row
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "passenger_idle_left",
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [2] }), // Third frame of first row
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "passenger_idle_down",
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [3] }), // Fourth frame of first row
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    // Create passenger walking animations from row 2
+    // Row 2 starts at frame 112
+    // Walking right: frames 112-117 (6 frames)
+    // Walking up: frames 118-123 (6 frames) - SWAPPED
+    // Walking left: frames 124-129 (6 frames)
+    // Walking down: frames 130-135 (6 frames) - SWAPPED
+    
+    console.log("Creating passenger walking animations...");
+    
+    this.anims.create({
+      key: "passenger_walk_right",
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [112, 113, 114, 115, 116, 117] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "passenger_walk_up",
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [118, 119, 120, 121, 122, 123] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "passenger_walk_left",
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [124, 125, 126, 127, 128, 129] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "passenger_walk_down",
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [130, 131, 132, 133, 134, 135] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    console.log("Passenger walking animations created!");
   }
   
   createPassengers(){
@@ -157,14 +227,14 @@ export default class Investigation extends Phaser.Scene {
     this.runState.passengers.forEach(passenger => {
       const seat = BUS_SEATS[passenger.seatIndex];
       
-      // Create passenger sprite using the same kid.png spritesheet
-      const sprite = this.add.sprite(seat.x, seat.y, "player")
-        .setScale(2) // Same scale as player
+      // Create passenger sprite using the passenger spritesheet (kid.png)
+      const sprite = this.add.sprite(seat.x, seat.y, "passenger")
+        .setScale(2) // Same scale as driver
         .setData("passenger", passenger)
         .setInteractive({ useHandCursor: true });
       
       // Set initial idle animation (facing down)
-      sprite.play("player_idle_down");
+      sprite.play("passenger_idle_down");
       
       // Add click handler for portrait view
       sprite.on("pointerdown", () => {
@@ -297,8 +367,8 @@ export default class Investigation extends Phaser.Scene {
       isMoving = true;
     }
     
-    // Update player animation based on direction and movement
-    const targetAnimation = isMoving ? `player_walk_${direction}` : `player_idle_${direction}`;
+    // Update driver animation based on direction and movement
+    const targetAnimation = isMoving ? `driver_walk_${direction}` : `driver_idle_${direction}`;
     
     // Only change animation if it's different from current
     if (this.driver.anims.currentAnim?.key !== targetAnimation) {

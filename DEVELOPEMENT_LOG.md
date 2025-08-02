@@ -111,7 +111,8 @@ You are a bus driver who must identify anomalies among your passengers. Each day
 - **Confirmation UI**: Yes/No buttons with dynamic visibility
 - **Animation system**: Passenger boarding, dropoff animations
 - **Seeded randomization**: Consistent gameplay per day
-- **Sprite Sheet Integration**: kid.png with 16x32 frames, 56 frames per row
+- **Driver Sprite Sheet Integration**: busman.png with 16x32 frames, 56 frames per row
+- **Passenger Sprite Sheet Integration**: kid.png with 16x32 frames, 56 frames per row
 - **Walking Animations**: 6-frame animations from row 2 (frames 112-135)
 - **Idle Animations**: Single-frame poses from row 0 (frames 0-3)
 - **Infinite Scrolling**: tileSprite with tilePositionX scrolling and seamless looping
@@ -249,7 +250,8 @@ You are a bus driver who must identify anomalies among your passengers. Each day
 
 ### ✅ Character Sprite System:
 
-- **All NPCs use kid.png sprite sheet** with consistent animations
+- **Driver uses busman.png sprite sheet** with consistent animations
+- **Passengers use kid.png sprite sheet** with consistent animations
 - **Walking animations** from row 2 (frames 112-135) with 6 frames each
 - **Idle animations** from row 0 (frames 0-3) for 4 directions
 - **No color tinting** - all characters look identical

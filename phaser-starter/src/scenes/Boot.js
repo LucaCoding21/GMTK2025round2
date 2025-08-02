@@ -11,8 +11,16 @@ export default class Boot extends Phaser.Scene {
     // Load background image
     this.load.image("background", "/map-game (1).png");
     
-    // Load player sprite sheet with pixel-perfect settings
-    this.load.spritesheet("player", "/kid.png", {
+    // Load passenger sprite sheet (kid.png) for all NPCs
+    this.load.spritesheet("passenger", "/kid.png", {
+      frameWidth: 16,
+      frameHeight: 32,
+      spacing: 0,
+      margin: 0
+    });
+    
+    // Load driver sprite sheet (busman.png) for the main character
+    this.load.spritesheet("driver", "/busman.png", {
       frameWidth: 16,
       frameHeight: 32,
       spacing: 0,
@@ -21,7 +29,8 @@ export default class Boot extends Phaser.Scene {
     
     // Set texture filtering to NEAREST for pixel-perfect rendering
     this.load.on('complete', () => {
-      this.textures.get('player').setFilter('NEAREST');
+      this.textures.get('passenger').setFilter('NEAREST');
+      this.textures.get('driver').setFilter('NEAREST');
       this.textures.get('background').setFilter('NEAREST');
     });
     
@@ -30,7 +39,7 @@ export default class Boot extends Phaser.Scene {
     
     // Bus driver (simple rectangle for now)
     g.fillStyle(0x3498db, 1).fillRoundedRect(0,0, 32,32, 4);
-    g.generateTexture("driver", 32,32);
+    g.generateTexture("driver_placeholder", 32,32);
     g.clear();
 
     // Passenger body (smaller for top-down view)
