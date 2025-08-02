@@ -1,0 +1,30 @@
+[
+  {
+    "id": "stop1",
+    "name": "Downtown Station",
+    "passengers": ["grandma"],
+    "x": 200,
+    "y": 300
+  },
+  {
+    "id": "stop2", 
+    "name": "University Campus",
+    "passengers": ["man", "kid"],
+    "x": 400,
+    "y": 200
+  },
+  {
+    "id": "stop3",
+    "name": "Shopping Mall",
+    "passengers": ["dog", "punk"],
+    "x": 600,
+    "y": 400
+  },
+  {
+    "id": "stop4",
+    "name": "Airport Terminal",
+    "passengers": ["tourist"],
+    "x": 800,
+    "y": 100
+  }
+] 

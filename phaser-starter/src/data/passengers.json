@@ -1,0 +1,86 @@
+[
+  { 
+    "id":"grandma", 
+    "name":"Grandma June",
+    "displayName":"Grandma June",
+    "colorHex": 11908533, 
+    "seatIndex": 0,
+    "stopId": "stop1",
+    "anomalyType": "no_glasses",
+    "portrait": {
+      "normal": "grandma_normal",
+      "anomaly": "grandma_no_glasses"
+    },
+    "topdown": "grandma_seated"
+  },
+  { 
+    "id":"man",     
+    "name":"Mr. Lane",
+    "displayName":"Mr. Lane",     
+    "colorHex": 13421721, 
+    "seatIndex": 1,
+    "stopId": "stop2",
+    "anomalyType": "no_briefcase",
+    "portrait": {
+      "normal": "man_normal",
+      "anomaly": "man_no_briefcase"
+    },
+    "topdown": "man_seated"
+  },
+  { 
+    "id":"kid",     
+    "name":"Ari",
+    "displayName":"Ari",          
+    "colorHex": 10066329, 
+    "seatIndex": 2,
+    "stopId": "stop2",
+    "anomalyType": "no_lunch",
+    "portrait": {
+      "normal": "kid_normal",
+      "anomaly": "kid_no_lunch"
+    },
+    "topdown": "kid_seated"
+  },
+  { 
+    "id":"dog",     
+    "name":"Dex",
+    "displayName":"Dex",          
+    "colorHex": 13158600, 
+    "seatIndex": 3,
+    "stopId": "stop3",
+    "anomalyType": "nervous",
+    "portrait": {
+      "normal": "dog_normal",
+      "anomaly": "dog_nervous"
+    },
+    "topdown": "dog_seated"
+  },
+  { 
+    "id":"punk",    
+    "name":"Vale",
+    "displayName":"Vale",         
+    "colorHex": 16731212, 
+    "seatIndex": 4,
+    "stopId": "stop3",
+    "anomalyType": "wrong_bus",
+    "portrait": {
+      "normal": "punk_normal",
+      "anomaly": "punk_wrong_bus"
+    },
+    "topdown": "punk_seated"
+  },
+  { 
+    "id":"tourist", 
+    "name":"Paz",
+    "displayName":"Paz",          
+    "colorHex": 16761308, 
+    "seatIndex": 5,
+    "stopId": "stop4",
+    "anomalyType": "lost",
+    "portrait": {
+      "normal": "tourist_normal",
+      "anomaly": "tourist_lost"
+    },
+    "topdown": "tourist_seated"
+  }
+] 

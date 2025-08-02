@@ -1,0 +1,32 @@
+{
+  "grandma": {
+    "normal": "Oh dear, I should finish this scarf before winter.",
+    "anomaly": "The yarn won't touch the light.",
+    "confirm": "Are you accusing me, young man? I've been riding this bus for years!"
+  },
+  "man": {
+    "normal": "The morning commute is always the same.",
+    "anomaly": "I think I left my briefcase at home...",
+    "confirm": "Excuse me? You think I'm the anomaly? That's preposterous."
+  },
+  "kid": {
+    "normal": "Quiz today. Wish me luck.",
+    "anomaly": "I've been on this bus forever. The test never comes.",
+    "confirm": "What? You think I'm weird? That's not very nice!"
+  },
+  "dog": {
+    "normal": "*Looks out the window contentedly*",
+    "anomaly": "*Seems nervous and keeps looking around*",
+    "confirm": "*Growls and looks offended*"
+  },
+  "punk": {
+    "normal": "The music on this bus is terrible.",
+    "anomaly": "I think I'm on the wrong bus...",
+    "confirm": "Seriously? You're accusing me? That's messed up."
+  },
+  "tourist": {
+    "normal": "This city is so beautiful!",
+    "anomaly": "I think I got on the wrong bus... I'm completely lost!",
+    "confirm": "Me? An anomaly? I'm just a tourist! This is ridiculous!"
+  }
+} 
