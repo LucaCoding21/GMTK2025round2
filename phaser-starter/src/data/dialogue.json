@@ -23,10 +23,5 @@
     "normal": "The music on this bus is terrible.",
     "anomaly": "I think I'm on the wrong bus...",
     "confirm": "Seriously? You're accusing me? That's messed up."
-  },
-  "tourist": {
-    "normal": "This city is so beautiful!",
-    "anomaly": "I think I got on the wrong bus... I'm completely lost!",
-    "confirm": "Me? An anomaly? I'm just a tourist! This is ridiculous!"
   }
 } 

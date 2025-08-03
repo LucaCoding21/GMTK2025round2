@@ -2,8 +2,8 @@ import { CorruptionController } from '../systems/CorruptionController.js';
 import { RunState } from '../systems/RunState.js';
 
 const BUS_SEATS = [
-  {x: 300, y: 325}, {x: 400, y: 325}, {x: 500, y: 325},
-  {x: 300, y: 425}, {x: 400, y: 425}, {x: 500, y: 425}
+  {x: 600, y: 110}, {x: 665, y: 110}, {x: 725, y: 110},
+  {x: 600, y: 235}, {x: 665, y: 235}, {x: 725, y: 235}
 ];
 
 const DRIVER_SEAT = {x: 250, y: 275}; // Driver's seat position moved down by 125 pixels
@@ -33,7 +33,7 @@ export default class Dropoff extends Phaser.Scene {
     this.createRemainingPassengers();
     
     // Create driver
-    this.driver = this.add.sprite(DRIVER_SEAT.x, DRIVER_SEAT.y, "driver").setOrigin(0.5).setScale(2);
+    this.driver = this.add.sprite(DRIVER_SEAT.x, DRIVER_SEAT.y, "driver").setOrigin(0.5).setScale(3).setDepth(2);
     this.driver.play("driver_idle_down");
     
     // Create status text (will be updated)
@@ -50,12 +50,20 @@ export default class Dropoff extends Phaser.Scene {
     // tileSprite automatically tiles the texture for seamless scrolling
     this.background = this.add.tileSprite(625, 345, 1250, 690, "background");
     
+    // Zoom in the background by scaling it up
+    this.background.setScale(4); // Increased scale for more zoom
+    
     // Adjust tile position to center the road on screen
     // Move the background up so the road appears in the center
     this.background.tilePositionY = -125; // Adjust this value to center the road
     
     // Set the background depth to be behind everything
     this.background.setDepth(0);
+    
+    // Add bus interior overlay
+    this.busInterior = this.add.image(625, 155, "bus_interior");
+    this.busInterior.setScale(1.5); // Standard bus scale
+    this.busInterior.setDepth(0.5); // Above background, below characters
     
     // Start background scrolling to simulate bus movement
     this.startBackgroundScrolling();
@@ -238,13 +246,32 @@ export default class Dropoff extends Phaser.Scene {
     remainingPassengers.forEach(passenger => {
       const seat = BUS_SEATS[passenger.seatIndex];
       
-      // Create passenger sprite using the passenger spritesheet (kid.png)
-      const sprite = this.add.sprite(seat.x, seat.y, "passenger")
-        .setScale(2) // Same scale as driver
+      // Use grandma sprite for grandma character, Mr. Lane sprite for Mr. Lane, Ari sprite for Ari, Dex sprite for Dex, otherwise use passenger sprite
+      let spriteKey = "passenger";
+      let idleAnimKey = "passenger_idle_down";
+      
+      if (passenger.id === "grandma") {
+        spriteKey = "grandma";
+        idleAnimKey = "grandma_idle_down";
+      } else if (passenger.id === "man") {
+        spriteKey = "mrlane";
+        idleAnimKey = "mrlane_idle_down";
+      } else if (passenger.id === "kid") {
+        spriteKey = "girl";
+        idleAnimKey = "girl_idle_down";
+      } else if (passenger.id === "dog") {
+        spriteKey = "busi";
+        idleAnimKey = "busi_idle_down";
+      }
+      
+      // Create passenger sprite using the appropriate spritesheet
+      const sprite = this.add.sprite(seat.x, seat.y, spriteKey)
+        .setScale(3) // Increased scale for bigger characters
+        .setDepth(2) // Above bus interior
         .setData("passenger", passenger);
       
       // Set initial idle animation (facing down)
-      sprite.play("passenger_idle_down");
+      sprite.play(idleAnimKey);
       
       this.passengerSprites.push(sprite);
     });
@@ -290,10 +317,31 @@ export default class Dropoff extends Phaser.Scene {
       const doorY = 150;
       
       // Step 1: Walk from seat to door (horizontal)
+      const passenger = sprite.getData("passenger");
       if (sprite.x > doorX) {
-        sprite.play("passenger_walk_left");
+        let walkLeftAnimKey = "passenger_walk_left";
+        if (passenger.id === "grandma") {
+          walkLeftAnimKey = "grandma_walk_left";
+        } else if (passenger.id === "man") {
+          walkLeftAnimKey = "mrlane_walk_left";
+        } else if (passenger.id === "kid") {
+          walkLeftAnimKey = "girl_walk_left";
+        } else if (passenger.id === "dog") {
+          walkLeftAnimKey = "busi_walk_left";
+        }
+        sprite.play(walkLeftAnimKey);
       } else {
-        sprite.play("passenger_walk_right");
+        let walkRightAnimKey = "passenger_walk_right";
+        if (passenger.id === "grandma") {
+          walkRightAnimKey = "grandma_walk_right";
+        } else if (passenger.id === "man") {
+          walkRightAnimKey = "mrlane_walk_right";
+        } else if (passenger.id === "kid") {
+          walkRightAnimKey = "girl_walk_right";
+        } else if (passenger.id === "dog") {
+          walkRightAnimKey = "busi_walk_right";
+        }
+        sprite.play(walkRightAnimKey);
       }
       
       // Walk to door
@@ -305,7 +353,17 @@ export default class Dropoff extends Phaser.Scene {
         ease: "Power2",
         onComplete: () => {
           // Step 2: Walk out of bus (vertical)
-          sprite.play("passenger_walk_up");
+          let walkUpAnimKey = "passenger_walk_up";
+          if (passenger.id === "grandma") {
+            walkUpAnimKey = "grandma_walk_up";
+          } else if (passenger.id === "man") {
+            walkUpAnimKey = "mrlane_walk_up";
+          } else if (passenger.id === "kid") {
+            walkUpAnimKey = "girl_walk_up";
+          } else if (passenger.id === "dog") {
+            walkUpAnimKey = "busi_walk_up";
+          }
+          sprite.play(walkUpAnimKey);
           
           this.tweens.add({
             targets: sprite,
@@ -315,7 +373,17 @@ export default class Dropoff extends Phaser.Scene {
             ease: "Power2",
             onComplete: () => {
               // Step 3: Walk away from bus (horizontal)
-              sprite.play("passenger_walk_left");
+              let walkLeftAnimKey = "passenger_walk_left";
+              if (passenger.id === "grandma") {
+                walkLeftAnimKey = "grandma_walk_left";
+              } else if (passenger.id === "man") {
+                walkLeftAnimKey = "mrlane_walk_left";
+              } else if (passenger.id === "kid") {
+                walkLeftAnimKey = "girl_walk_left";
+              } else if (passenger.id === "dog") {
+                walkLeftAnimKey = "busi_walk_left";
+              }
+              sprite.play(walkLeftAnimKey);
               
               this.tweens.add({
                 targets: sprite,

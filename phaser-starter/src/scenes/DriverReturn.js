@@ -1,6 +1,6 @@
 const BUS_SEATS = [
-  {x: 300, y: 325}, {x: 400, y: 325}, {x: 500, y: 325},
-  {x: 300, y: 425}, {x: 400, y: 425}, {x: 500, y: 425}
+  {x: 600, y: 110}, {x: 665, y: 110}, {x: 725, y: 110},
+  {x: 600, y: 235}, {x: 665, y: 235}, {x: 725, y: 235}
 ];
 
 const DRIVER_SEAT = {x: 250, y: 275}; // Driver's seat position moved down by 125 pixels
@@ -22,7 +22,7 @@ export default class DriverReturn extends Phaser.Scene {
     this.createPassengers();
     
     // Create driver
-    this.driver = this.add.sprite(250, 250, "driver").setOrigin(0.5).setScale(2);
+    this.driver = this.add.sprite(250, 250, "driver").setOrigin(0.5).setScale(3).setDepth(2);
     this.driver.play("driver_idle_down");
     
     // Create status text
@@ -54,12 +54,20 @@ export default class DriverReturn extends Phaser.Scene {
     // This matches the other scenes approach but without scrolling
     this.background = this.add.tileSprite(625, 345, 1250, 690, "background");
     
+    // Zoom in the background by scaling it up
+    this.background.setScale(4); // Increased scale for more zoom
+    
     // Adjust tile position to center the road on screen
     // Move the background up so the road appears in the center
     this.background.tilePositionY = -125; // Adjust this value to center the road
     
     // Set the background depth to be behind everything
     this.background.setDepth(0);
+    
+    // Add bus interior overlay
+    this.busInterior = this.add.image(625, 155, "bus_interior");
+    this.busInterior.setScale(1.5); // Standard bus scale
+    this.busInterior.setDepth(0.5); // Above background, below characters
   }
   
   createDriverAnimations(){
@@ -135,13 +143,32 @@ export default class DriverReturn extends Phaser.Scene {
     this.runState.passengers.forEach(passenger => {
       const seat = BUS_SEATS[passenger.seatIndex];
       
-      // Create passenger sprite using the passenger spritesheet (kid.png)
-      const sprite = this.add.sprite(seat.x, seat.y, "passenger")
-        .setScale(2) // Same scale as driver
+      // Use grandma sprite for grandma character, Mr. Lane sprite for Mr. Lane, Ari sprite for Ari, Dex sprite for Dex, otherwise use passenger sprite
+      let spriteKey = "passenger";
+      let idleAnimKey = "passenger_idle_down";
+      
+      if (passenger.id === "grandma") {
+        spriteKey = "grandma";
+        idleAnimKey = "grandma_idle_down";
+      } else if (passenger.id === "man") {
+        spriteKey = "mrlane";
+        idleAnimKey = "mrlane_idle_down";
+      } else if (passenger.id === "kid") {
+        spriteKey = "girl";
+        idleAnimKey = "girl_idle_down";
+      } else if (passenger.id === "dog") {
+        spriteKey = "busi";
+        idleAnimKey = "busi_idle_down";
+      }
+      
+      // Create passenger sprite using the appropriate spritesheet
+      const sprite = this.add.sprite(seat.x, seat.y, spriteKey)
+        .setScale(3) // Increased scale for bigger characters
+        .setDepth(2) // Above bus interior
         .setData("passenger", passenger);
       
       // Set initial idle animation (facing down)
-      sprite.play("passenger_idle_down");
+      sprite.play(idleAnimKey);
       
       this.passengerSprites.push(sprite);
     });

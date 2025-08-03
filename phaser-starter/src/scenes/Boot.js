@@ -11,8 +11,43 @@ export default class Boot extends Phaser.Scene {
     // Load background image
     this.load.image("background", "/map-game (1).png");
     
-    // Load passenger sprite sheet (kid.png) for all NPCs
+    // Load bus interior image
+    this.load.image("bus_interior", "/bus1.png");
+    
+    // Load passenger sprite sheet (kid.png) for most NPCs
     this.load.spritesheet("passenger", "/kid.png", {
+      frameWidth: 16,
+      frameHeight: 32,
+      spacing: 0,
+      margin: 0
+    });
+    
+    // Load grandma sprite sheet (grandma.png) for grandma character
+    this.load.spritesheet("grandma", "/grandma.png", {
+      frameWidth: 16,
+      frameHeight: 32,
+      spacing: 0,
+      margin: 0
+    });
+    
+    // Load Mr. Lane sprite sheet (mrlane.png) for Mr. Lane character
+    this.load.spritesheet("mrlane", "/mrlane.png", {
+      frameWidth: 16,
+      frameHeight: 32,
+      spacing: 0,
+      margin: 0
+    });
+    
+    // Load Ari sprite sheet (girl.png) for Ari character
+    this.load.spritesheet("girl", "/girl.png", {
+      frameWidth: 16,
+      frameHeight: 32,
+      spacing: 0,
+      margin: 0
+    });
+    
+    // Load Dex sprite sheet (busi.png) for Dex character
+    this.load.spritesheet("busi", "/busi.png", {
       frameWidth: 16,
       frameHeight: 32,
       spacing: 0,
@@ -30,8 +65,13 @@ export default class Boot extends Phaser.Scene {
     // Set texture filtering to NEAREST for pixel-perfect rendering
     this.load.on('complete', () => {
       this.textures.get('passenger').setFilter('NEAREST');
+      this.textures.get('grandma').setFilter('NEAREST');
+      this.textures.get('mrlane').setFilter('NEAREST');
+      this.textures.get('girl').setFilter('NEAREST');
+      this.textures.get('busi').setFilter('NEAREST');
       this.textures.get('driver').setFilter('NEAREST');
       this.textures.get('background').setFilter('NEAREST');
+      this.textures.get('bus_interior').setFilter('NEAREST');
     });
     
     // Generate "textures" using graphics so we don't need external assets.
@@ -71,7 +111,7 @@ export default class Boot extends Phaser.Scene {
 
   generatePortraitTextures(g) {
     // Generate placeholder portrait textures for each character
-    const characters = ['grandma', 'man', 'kid', 'dog', 'punk', 'tourist'];
+    const characters = ['grandma', 'man', 'kid', 'dog', 'punk'];
     const variants = ['normal', 'anomaly'];
     
     characters.forEach(char => {
@@ -93,10 +133,274 @@ export default class Boot extends Phaser.Scene {
     this.game.transitionGuard = new TransitionGuard();
     this.game.sfx = new Sfx(this);
     
+    // Create grandma animations (same pattern as passenger animations)
+    this.createGrandmaAnimations();
+    
+    // Create Mr. Lane animations (same pattern as passenger animations)
+    this.createMrLaneAnimations();
+    
+    // Create Ari animations (same pattern as passenger animations)
+    this.createGirlAnimations();
+    
+    // Create Dex animations (same pattern as passenger animations)
+    this.createBusiAnimations();
+    
     // Load passengers and initialize run state
     const passengers = this.cache.json.get("passengers");
     this.game.runState.initialize(passengers);
     
     this.scene.start("DaySplash", { day: 1 });
+  }
+  
+  createGrandmaAnimations(){
+    // Grandma idle animations using frame 290 (5th row, 10th column)
+    
+    this.anims.create({
+      key: "grandma_idle_right",
+      frames: this.anims.generateFrameNumbers("grandma", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "grandma_idle_up",
+      frames: this.anims.generateFrameNumbers("grandma", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "grandma_idle_left",
+      frames: this.anims.generateFrameNumbers("grandma", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "grandma_idle_down",
+      frames: this.anims.generateFrameNumbers("grandma", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    // Grandma walking animations using frames from row 2 (frames 112-135)
+    // Each direction has 6 frames of walking animation
+    
+    this.anims.create({
+      key: "grandma_walk_right",
+      frames: this.anims.generateFrameNumbers("grandma", { frames: [112, 113, 114, 115, 116, 117] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "grandma_walk_up",
+      frames: this.anims.generateFrameNumbers("grandma", { frames: [118, 119, 120, 121, 122, 123] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "grandma_walk_left",
+      frames: this.anims.generateFrameNumbers("grandma", { frames: [124, 125, 126, 127, 128, 129] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "grandma_walk_down",
+      frames: this.anims.generateFrameNumbers("grandma", { frames: [130, 131, 132, 133, 134, 135] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+  }
+  
+  createMrLaneAnimations(){
+    // Mr. Lane idle animations using frame 290 (5th row, 10th column)
+    
+    this.anims.create({
+      key: "mrlane_idle_right",
+      frames: this.anims.generateFrameNumbers("mrlane", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "mrlane_idle_up",
+      frames: this.anims.generateFrameNumbers("mrlane", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "mrlane_idle_left",
+      frames: this.anims.generateFrameNumbers("mrlane", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "mrlane_idle_down",
+      frames: this.anims.generateFrameNumbers("mrlane", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    // Mr. Lane walking animations using frames from row 2 (frames 112-135)
+    // Each direction has 6 frames of walking animation
+    
+    this.anims.create({
+      key: "mrlane_walk_right",
+      frames: this.anims.generateFrameNumbers("mrlane", { frames: [112, 113, 114, 115, 116, 117] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "mrlane_walk_up",
+      frames: this.anims.generateFrameNumbers("mrlane", { frames: [118, 119, 120, 121, 122, 123] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "mrlane_walk_left",
+      frames: this.anims.generateFrameNumbers("mrlane", { frames: [124, 125, 126, 127, 128, 129] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "mrlane_walk_down",
+      frames: this.anims.generateFrameNumbers("mrlane", { frames: [130, 131, 132, 133, 134, 135] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+  }
+  
+  createGirlAnimations(){
+    // Ari idle animations using frame 290 (5th row, 10th column)
+    
+    this.anims.create({
+      key: "girl_idle_right",
+      frames: this.anims.generateFrameNumbers("girl", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "girl_idle_up",
+      frames: this.anims.generateFrameNumbers("girl", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "girl_idle_left",
+      frames: this.anims.generateFrameNumbers("girl", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "girl_idle_down",
+      frames: this.anims.generateFrameNumbers("girl", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    // Ari walking animations using frames from row 2 (frames 112-135)
+    // Each direction has 6 frames of walking animation
+    
+    this.anims.create({
+      key: "girl_walk_right",
+      frames: this.anims.generateFrameNumbers("girl", { frames: [112, 113, 114, 115, 116, 117] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "girl_walk_up",
+      frames: this.anims.generateFrameNumbers("girl", { frames: [118, 119, 120, 121, 122, 123] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "girl_walk_left",
+      frames: this.anims.generateFrameNumbers("girl", { frames: [124, 125, 126, 127, 128, 129] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "girl_walk_down",
+      frames: this.anims.generateFrameNumbers("girl", { frames: [130, 131, 132, 133, 134, 135] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+  }
+  
+  createBusiAnimations(){
+    // Dex idle animations using frame 290 (5th row, 10th column)
+    
+    this.anims.create({
+      key: "busi_idle_right",
+      frames: this.anims.generateFrameNumbers("busi", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "busi_idle_up",
+      frames: this.anims.generateFrameNumbers("busi", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "busi_idle_left",
+      frames: this.anims.generateFrameNumbers("busi", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "busi_idle_down",
+      frames: this.anims.generateFrameNumbers("busi", { frames: [290] }), // 5th row, 10th column
+      frameRate: 1,
+      repeat: -1
+    });
+    
+    // Dex walking animations using frames from row 2 (frames 112-135)
+    // Each direction has 6 frames of walking animation
+    
+    this.anims.create({
+      key: "busi_walk_right",
+      frames: this.anims.generateFrameNumbers("busi", { frames: [112, 113, 114, 115, 116, 117] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "busi_walk_up",
+      frames: this.anims.generateFrameNumbers("busi", { frames: [118, 119, 120, 121, 122, 123] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "busi_walk_left",
+      frames: this.anims.generateFrameNumbers("busi", { frames: [124, 125, 126, 127, 128, 129] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
+    
+    this.anims.create({
+      key: "busi_walk_down",
+      frames: this.anims.generateFrameNumbers("busi", { frames: [130, 131, 132, 133, 134, 135] }),
+      frameRate: 12, // Increased for smoother animation
+      repeat: -1
+    });
   }
 } 

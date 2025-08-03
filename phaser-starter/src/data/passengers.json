@@ -68,19 +68,5 @@
       "anomaly": "punk_wrong_bus"
     },
     "topdown": "punk_seated"
-  },
-  { 
-    "id":"tourist", 
-    "name":"Paz",
-    "displayName":"Paz",          
-    "colorHex": 16761308, 
-    "seatIndex": 5,
-    "stopId": "stop4",
-    "anomalyType": "lost",
-    "portrait": {
-      "normal": "tourist_normal",
-      "anomaly": "tourist_lost"
-    },
-    "topdown": "tourist_seated"
   }
 ] 

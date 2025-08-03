@@ -2,8 +2,8 @@ import { PortraitManager } from '../systems/PortraitManager.js';
 import { CorruptionController } from '../systems/CorruptionController.js';
 
 const BUS_SEATS = [
-  {x: 300, y: 325}, {x: 400, y: 325}, {x: 500, y: 325},
-  {x: 300, y: 425}, {x: 400, y: 425}, {x: 500, y: 425}
+  {x: 600, y: 110}, {x: 665, y: 110}, {x: 725, y: 110},
+  {x: 600, y: 235}, {x: 665, y: 235}, {x: 725, y: 235}
 ];
 
 export default class Investigation extends Phaser.Scene {
@@ -25,7 +25,7 @@ export default class Investigation extends Phaser.Scene {
     this.createPlayerAnimations();
     
     // Create driver with movement
-    this.driver = this.add.sprite(250, 250, "driver").setOrigin(0.5).setScale(2);
+    this.driver = this.add.sprite(470, 105, "driver").setOrigin(0.5).setScale(3).setDepth(2);
     this.driver.play("driver_idle_right");
     this.cursors = this.input.keyboard.createCursorKeys();
     
@@ -46,24 +46,155 @@ export default class Investigation extends Phaser.Scene {
       this.handleAccuse("NONE");
     });
     
-    // UI
-    this.add.text(16, 12, "Walk around and talk to passengers", { 
-      fontFamily: "monospace", fontSize: 18, color: "#ffffff" 
-    });
-    this.add.text(16, 40, "Click passengers to see their portrait", { 
-      fontFamily: "monospace", fontSize: 14, color: "#cccccc" 
+    // Create modern UI
+    this.createModernUI();
+  }
+  
+  createModernUI() {
+    // Create header panel
+    this.createHeaderPanel();
+    
+    // Create instructions panel
+    this.createInstructionsPanel();
+    
+    // Create status indicators
+    this.createStatusIndicators();
+  }
+  
+  createHeaderPanel() {
+    // Header background
+    this.headerBg = this.add.graphics();
+    this.headerBg.fillGradientStyle(0x2c3e50, 0x34495e, 0x2c3e50, 0x34495e, 1);
+    this.headerBg.fillRoundedRect(0, 0, 1250, 80, 0);
+    this.headerBg.lineStyle(2, 0x3498db, 1);
+    this.headerBg.strokeRoundedRect(0, 0, 1250, 80, 0);
+    
+    // Day indicator
+    this.dayText = this.add.text(30, 25, `DAY ${this.day}`, {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "28px",
+      fontStyle: "bold",
+      color: "#ffffff",
+      stroke: "#2c3e50",
+      strokeThickness: 3
     });
     
-    // Show different instructions based on day
+    // Game title
+    this.titleText = this.add.text(625, 25, "BUS DRIVER MYSTERY", {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "24px",
+      fontStyle: "bold",
+      color: "#3498db",
+      stroke: "#2c3e50",
+      strokeThickness: 2
+    }).setOrigin(0.5);
+    
+    // Anomaly indicator
+    this.anomalyText = this.add.text(1220, 25, this.day === 1 ? "NO ANOMALY" : "ANOMALY DETECTED", {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "18px",
+      fontStyle: "bold",
+      color: this.day === 1 ? "#27ae60" : "#e74c3c",
+      stroke: "#2c3e50",
+      strokeThickness: 2
+    }).setOrigin(1, 0.5);
+  }
+  
+  createInstructionsPanel() {
+    // Instructions background
+    this.instructionsBg = this.add.graphics();
+    this.instructionsBg.fillStyle(0x2c3e50, 0.9);
+    this.instructionsBg.fillRoundedRect(20, 100, 400, 120, 10);
+    this.instructionsBg.lineStyle(2, 0x3498db, 1);
+    this.instructionsBg.strokeRoundedRect(20, 100, 400, 120, 10);
+    
+    // Instructions text
+    this.instructionsText = this.add.text(40, 120, "INSTRUCTIONS:", {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "18px",
+      fontStyle: "bold",
+      color: "#3498db"
+    });
+    
+    this.instruction1 = this.add.text(40, 150, "• Walk around with arrow keys", {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "14px",
+      color: "#ecf0f1"
+    });
+    
+    this.instruction2 = this.add.text(40, 170, "• Click passengers to investigate", {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "14px",
+      color: "#ecf0f1"
+    });
+    
+    this.instruction3 = this.add.text(40, 190, "• Press SPACE to trust everyone", {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "14px",
+      color: "#ecf0f1"
+    });
+    
+    // Day-specific instruction
     if (this.day === 1) {
-      this.add.text(16, 60, "Day 1: Everyone is innocent - no anomalies today", { 
-        fontFamily: "monospace", fontSize: 14, color: "#44ff44" 
+      this.dayInstruction = this.add.text(40, 210, "• Day 1: Everyone is innocent!", {
+        fontFamily: "Arial, sans-serif",
+        fontSize: "14px",
+        color: "#27ae60",
+        fontStyle: "bold"
       });
     } else {
-      this.add.text(16, 60, "Press SPACE if you trust everyone (no anomaly)", { 
-        fontFamily: "monospace", fontSize: 14, color: "#44ff44" 
+      this.dayInstruction = this.add.text(40, 210, "• Find the anomaly among passengers", {
+        fontFamily: "Arial, sans-serif",
+        fontSize: "14px",
+        color: "#e74c3c",
+        fontStyle: "bold"
       });
     }
+  }
+  
+  createStatusIndicators() {
+    // Status panel
+    this.statusBg = this.add.graphics();
+    this.statusBg.fillStyle(0x2c3e50, 0.9);
+    this.statusBg.fillRoundedRect(830, 100, 400, 120, 10);
+    this.statusBg.lineStyle(2, 0x3498db, 1);
+    this.statusBg.strokeRoundedRect(830, 100, 400, 120, 10);
+    
+    // Status title
+    this.statusTitle = this.add.text(850, 120, "STATUS:", {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "18px",
+      fontStyle: "bold",
+      color: "#3498db"
+    });
+    
+    // Passenger count
+    this.passengerCount = this.add.text(850, 150, `Passengers: ${this.runState.passengers.length}`, {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "14px",
+      color: "#ecf0f1"
+    });
+    
+    // Current state
+    this.currentState = this.add.text(850, 170, "State: Investigating", {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "14px",
+      color: "#f39c12"
+    });
+    
+    // Anomaly status
+    this.anomalyStatus = this.add.text(850, 190, this.day === 1 ? "Anomaly: None (Day 1)" : "Anomaly: Unknown", {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "14px",
+      color: this.day === 1 ? "#27ae60" : "#e74c3c"
+    });
+    
+    // Controls reminder
+    this.controlsReminder = this.add.text(850, 210, "Controls: Arrow Keys + Click + SPACE", {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "12px",
+      color: "#95a5a6"
+    });
   }
   
   createBackground(){
@@ -71,12 +202,20 @@ export default class Investigation extends Phaser.Scene {
     // This matches the Pickup scene approach but without scrolling
     this.background = this.add.tileSprite(625, 345, 1250, 690, "background");
     
+    // Zoom in the background by scaling it up
+    this.background.setScale(4); // Increased scale for more zoom
+    
     // Adjust tile position to center the road on screen
     // Move the background up so the road appears in the center
     this.background.tilePositionY = -125; // Adjust this value to center the road
     
     // Set the background depth to be behind everything
     this.background.setDepth(0);
+    
+    // Add bus interior overlay
+    this.busInterior = this.add.image(625, 155, "bus_interior");
+    this.busInterior.setScale(1.5); // Standard bus scale
+    this.busInterior.setDepth(0.5); // Above background, below characters
   }
   
   createPlayerAnimations(){
@@ -156,28 +295,28 @@ export default class Investigation extends Phaser.Scene {
     
     this.anims.create({
       key: "passenger_idle_right",
-      frames: this.anims.generateFrameNumbers("passenger", { frames: [0] }), // First frame of first row
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [290] }), // 5th row, 10th column
       frameRate: 1,
       repeat: -1
     });
     
     this.anims.create({
       key: "passenger_idle_up",
-      frames: this.anims.generateFrameNumbers("passenger", { frames: [1] }), // Second frame of first row
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [290] }), // 5th row, 10th column
       frameRate: 1,
       repeat: -1
     });
     
     this.anims.create({
       key: "passenger_idle_left",
-      frames: this.anims.generateFrameNumbers("passenger", { frames: [2] }), // Third frame of first row
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [290] }), // 5th row, 10th column
       frameRate: 1,
       repeat: -1
     });
     
     this.anims.create({
       key: "passenger_idle_down",
-      frames: this.anims.generateFrameNumbers("passenger", { frames: [3] }), // Fourth frame of first row
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [290] }), // 5th row, 10th column
       frameRate: 1,
       repeat: -1
     });
@@ -227,14 +366,33 @@ export default class Investigation extends Phaser.Scene {
     this.runState.passengers.forEach(passenger => {
       const seat = BUS_SEATS[passenger.seatIndex];
       
-      // Create passenger sprite using the passenger spritesheet (kid.png)
-      const sprite = this.add.sprite(seat.x, seat.y, "passenger")
-        .setScale(2) // Same scale as driver
+      // Use grandma sprite for grandma character, Mr. Lane sprite for Mr. Lane, Ari sprite for Ari, Dex sprite for Dex, otherwise use passenger sprite
+      let spriteKey = "passenger";
+      let idleAnimKey = "passenger_idle_down";
+      
+      if (passenger.id === "grandma") {
+        spriteKey = "grandma";
+        idleAnimKey = "grandma_idle_down";
+      } else if (passenger.id === "man") {
+        spriteKey = "mrlane";
+        idleAnimKey = "mrlane_idle_down";
+      } else if (passenger.id === "kid") {
+        spriteKey = "girl";
+        idleAnimKey = "girl_idle_down";
+      } else if (passenger.id === "dog") {
+        spriteKey = "busi";
+        idleAnimKey = "busi_idle_down";
+      }
+      
+      // Create passenger sprite using the appropriate spritesheet
+      const sprite = this.add.sprite(seat.x, seat.y, spriteKey)
+        .setScale(3) // Increased scale for bigger characters
+        .setDepth(2) // Above bus interior
         .setData("passenger", passenger)
         .setInteractive({ useHandCursor: true });
       
       // Set initial idle animation (facing down)
-      sprite.play("passenger_idle_down");
+      sprite.play(idleAnimKey);
       
       // Add click handler for portrait view
       sprite.on("pointerdown", () => {
@@ -375,8 +533,8 @@ export default class Investigation extends Phaser.Scene {
       this.driver.play(targetAnimation);
     }
     
-    // Keep driver in bounds - updated for horizontal bus layout
-    this.driver.x = Phaser.Math.Clamp(this.driver.x, 280, 520);
-    this.driver.y = Phaser.Math.Clamp(this.driver.y, 305, 545); // Moved down by 125 pixels
+    // Keep driver in bounds - updated for new bus layout
+    this.driver.x = Phaser.Math.Clamp(this.driver.x, 475,800);
+    this.driver.y = Phaser.Math.Clamp(this.driver.y, 90, 255);
   }
 } 

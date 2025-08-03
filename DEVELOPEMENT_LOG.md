@@ -95,6 +95,7 @@ You are a bus driver who must identify anomalies among your passengers. Each day
 - **Pixel-Perfect Rendering**: NEAREST filtering, roundPixels, optimized game config
 - **Realistic Boarding/Exit**: 3-step walking animations (horizontal→vertical→horizontal)
 - **Background Positioning**: Road centered on screen with tilePositionY adjustments
+- **Bus Interior Background**: bus1.png integrated as overlay across all scenes with proper depth layering
 
 ### ✅ Data Structure:
 
@@ -222,7 +223,6 @@ You are a bus driver who must identify anomalies among your passengers. Each day
 - **Ari (Kid)**: "no_lunch" - mom forgot to pack lunch
 - **Dex (Dog)**: "nervous" - seems nervous and keeps looking around
 - **Vale (Punk)**: "wrong_bus" - thinks they're on wrong bus
-- **Paz (Tourist)**: "lost" - completely lost and confused
 
 ### Game Balance:
 
@@ -251,11 +251,16 @@ You are a bus driver who must identify anomalies among your passengers. Each day
 ### ✅ Character Sprite System:
 
 - **Driver uses busman.png sprite sheet** with consistent animations
-- **Passengers use kid.png sprite sheet** with consistent animations
+- **Passengers use kid.png sprite sheet** with consistent animations (except grandma, Mr. Lane, Ari, and Dex)
+- **Grandma June uses grandma.png sprite sheet** with consistent animations
+- **Mr. Lane uses mrlane.png sprite sheet** with consistent animations
+- **Ari uses girl.png sprite sheet** with consistent animations
+- **Dex uses busi.png sprite sheet** with consistent animations
 - **Walking animations** from row 2 (frames 112-135) with 6 frames each
 - **Idle animations** from row 0 (frames 0-3) for 4 directions
 - **No color tinting** - all characters look identical
 - **Proper frame cycling** with 12 FPS animation speed
+- **Increased character scale** to 3x for bigger, more visible characters
 
 ### ✅ Infinite Scrolling Background:
 
@@ -283,6 +288,40 @@ You are a bus driver who must identify anomalies among your passengers. Each day
 - **Road centered** on screen with tilePositionY = -125
 - **Bus area moved down** 125 pixels to align with centered road
 - **Consistent positioning** across all scenes and UI elements
+- **Background zoom** with 1.5x scale for closer map view
+
+### ✅ Character-Specific Sprite Implementation:
+
+- **Grandma June uses grandma.png sprite sheet** instead of kid.png
+- **Mr. Lane uses mrlane.png sprite sheet** instead of kid.png
+- **Ari uses girl.png sprite sheet** instead of kid.png
+- **Dex uses busi.png sprite sheet** instead of kid.png
+- **Consistent animation system** with same frame patterns as other characters
+- **Updated across all scenes**: Pickup, Investigation, DriverReturn, Dropoff
+- **Conditional sprite selection** based on passenger.id (grandma/man/kid/dog)
+- **Proper animation key mapping** for idle and walking animations
+
+### ✅ Modern UI System:
+
+- **Beautiful portrait interface** with rounded corners, gradients, and hover effects
+- **Modern typography** using Arial font family with proper styling
+- **Interactive buttons** with hover animations and visual feedback
+- **Header panel** with day indicator, game title, and anomaly status
+- **Instructions panel** with clear, organized information
+- **Status indicators** showing passenger count, current state, and controls
+- **Animated day splash screen** with gradient backgrounds and smooth transitions
+- **Professional color scheme** using modern web colors (#3498db, #2c3e50, etc.)
+- **Responsive design** that adapts to different screen sizes
+
+### ✅ Bus Interior Integration:
+
+- **bus1.png integrated** as bus interior background across all scenes
+- **Proper depth layering** with bus interior above road background but below characters
+- **Consistent scaling** with 1.0x scale for smaller, more appropriate bus size
+- **NEAREST filtering** applied for pixel-perfect rendering
+- **Scene integration** in Pickup, Investigation, DriverReturn, and Dropoff scenes
+- **Background overlay approach** maintains infinite scrolling road background
+- **Character depth optimization** with all characters at depth 2 to ensure they appear above bus interior
 
 ### ✅ Sprite Sheet Guide:
 

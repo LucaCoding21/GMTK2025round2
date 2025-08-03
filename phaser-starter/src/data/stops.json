@@ -19,12 +19,5 @@
     "passengers": ["dog", "punk"],
     "x": 600,
     "y": 400
-  },
-  {
-    "id": "stop4",
-    "name": "Airport Terminal",
-    "passengers": ["tourist"],
-    "x": 800,
-    "y": 100
   }
 ] 

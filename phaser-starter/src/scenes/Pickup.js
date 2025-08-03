@@ -1,6 +1,6 @@
 const BUS_SEATS = [
-  {x: 300, y: 325}, {x: 400, y: 325}, {x: 500, y: 325},
-  {x: 300, y: 425}, {x: 400, y: 425}, {x: 500, y: 425}
+  {x: 600, y: 110}, {x: 665, y: 110}, {x: 725, y: 110},
+  {x: 600, y: 235}, {x: 665, y: 235}, {x: 725, y: 235}
 ];
 
 export default class Pickup extends Phaser.Scene {
@@ -23,8 +23,8 @@ export default class Pickup extends Phaser.Scene {
     this.createDoor();
     
     // Create driver
-    this.driver = this.add.sprite(250, 250, "driver").setOrigin(0.5).setScale(2);
-    this.driver.play("driver_idle_down");
+    this.driver = this.add.sprite(470, 105, "driver").setOrigin(0.5).setScale(3).setDepth(2);
+    this.driver.setFrame(461); // Use frame 461 instead of idle animation
     
     // Start pickup sequence
     this.pickupNextPassenger();
@@ -35,12 +35,20 @@ export default class Pickup extends Phaser.Scene {
     // tileSprite automatically tiles the texture for seamless scrolling
     this.background = this.add.tileSprite(625, 345, 1250, 690, "background");
     
+    // Zoom in the background by scaling it up
+    this.background.setScale(4); // Increased scale for more zoom
+    
     // Adjust tile position to center the road on screen
     // Move the background up so the road appears in the center
     this.background.tilePositionY = -125; // Adjust this value to center the road
     
     // Set the background depth to be behind everything
     this.background.setDepth(0);
+    
+    // Add bus interior overlay
+    this.busInterior = this.add.image(625, 155, "bus_interior");
+    this.busInterior.setScale(1.5); // Standard bus scale
+    this.busInterior.setDepth(0.5); // Above background, below characters
     
     // Start background scrolling to simulate bus movement
     this.startBackgroundScrolling();
@@ -82,28 +90,28 @@ export default class Pickup extends Phaser.Scene {
     
     this.anims.create({
       key: "passenger_idle_right",
-      frames: this.anims.generateFrameNumbers("passenger", { frames: [0] }), // First frame of first row
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [290] }), // 5th row, 10th column
       frameRate: 1,
       repeat: -1
     });
     
     this.anims.create({
       key: "passenger_idle_up",
-      frames: this.anims.generateFrameNumbers("passenger", { frames: [1] }), // Second frame of first row
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [290] }), // 5th row, 10th column
       frameRate: 1,
       repeat: -1
     });
     
     this.anims.create({
       key: "passenger_idle_left",
-      frames: this.anims.generateFrameNumbers("passenger", { frames: [2] }), // Third frame of first row
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [290] }), // 5th row, 10th column
       frameRate: 1,
       repeat: -1
     });
     
     this.anims.create({
       key: "passenger_idle_down",
-      frames: this.anims.generateFrameNumbers("passenger", { frames: [3] }), // Fourth frame of first row
+      frames: this.anims.generateFrameNumbers("passenger", { frames: [290] }), // 5th row, 10th column
       frameRate: 1,
       repeat: -1
     });
@@ -281,19 +289,49 @@ export default class Pickup extends Phaser.Scene {
     // Show passenger waiting
     const x = 600;
     const y = 225; // Moved down by 125 pixels
-    const sprite = this.add.sprite(x, y, "passenger")
-      .setScale(2) // Same scale as driver
+    
+    // Use grandma sprite for grandma character, Mr. Lane sprite for Mr. Lane, Ari sprite for Ari, Dex sprite for Dex, otherwise use passenger sprite
+    let spriteKey = "passenger";
+    let idleAnimKey = "passenger_idle_down";
+    
+    if (passenger.id === "grandma") {
+      spriteKey = "grandma";
+      idleAnimKey = "grandma_idle_down";
+    } else if (passenger.id === "man") {
+      spriteKey = "mrlane";
+      idleAnimKey = "mrlane_idle_down";
+    } else if (passenger.id === "kid") {
+      spriteKey = "girl";
+      idleAnimKey = "girl_idle_down";
+    } else if (passenger.id === "dog") {
+      spriteKey = "busi";
+      idleAnimKey = "busi_idle_down";
+    }
+    
+    const sprite = this.add.sprite(x, y, spriteKey)
+      .setScale(3) // Same scale as driver
+      .setDepth(2) // Above bus interior
       .setData("passenger", passenger);
     
     // Set initial idle animation (facing down)
-    sprite.play("passenger_idle_down");
+    sprite.play(idleAnimKey);
     
     // Define door position (same Y as passenger, but at bus entrance)
     const doorX = 500;
     const doorY = 275; // Door position moved down by 125 pixels
     
     // Start walking left animation
-    sprite.play("passenger_walk_left");
+    let walkLeftAnimKey = "passenger_walk_left";
+    if (passenger.id === "grandma") {
+      walkLeftAnimKey = "grandma_walk_left";
+    } else if (passenger.id === "man") {
+      walkLeftAnimKey = "mrlane_walk_left";
+    } else if (passenger.id === "kid") {
+      walkLeftAnimKey = "girl_walk_left";
+    } else if (passenger.id === "dog") {
+      walkLeftAnimKey = "busi_walk_left";
+    }
+    sprite.play(walkLeftAnimKey);
     
     // Step 1: Walk horizontally to the door
     this.tweens.add({
@@ -307,7 +345,17 @@ export default class Pickup extends Phaser.Scene {
         this.game.sfx.door();
         
         // Change to walking down animation
-        sprite.play("passenger_walk_down");
+        let walkDownAnimKey = "passenger_walk_down";
+        if (passenger.id === "grandma") {
+          walkDownAnimKey = "grandma_walk_down";
+        } else if (passenger.id === "man") {
+          walkDownAnimKey = "mrlane_walk_down";
+        } else if (passenger.id === "kid") {
+          walkDownAnimKey = "girl_walk_down";
+        } else if (passenger.id === "dog") {
+          walkDownAnimKey = "busi_walk_down";
+        }
+        sprite.play(walkDownAnimKey);
         
         // Step 2: Walk vertically from door to seat (MUCH SLOWER)
         this.tweens.add({
@@ -319,9 +367,29 @@ export default class Pickup extends Phaser.Scene {
           onComplete: () => {
             // Change to walking right/left to final seat position
             if (BUS_SEATS[passenger.seatIndex].x > doorX) {
-              sprite.play("passenger_walk_right");
+              let walkRightAnimKey = "passenger_walk_right";
+              if (passenger.id === "grandma") {
+                walkRightAnimKey = "grandma_walk_right";
+              } else if (passenger.id === "man") {
+                walkRightAnimKey = "mrlane_walk_right";
+              } else if (passenger.id === "kid") {
+                walkRightAnimKey = "girl_walk_right";
+              } else if (passenger.id === "dog") {
+                walkRightAnimKey = "busi_walk_right";
+              }
+              sprite.play(walkRightAnimKey);
             } else {
-              sprite.play("passenger_walk_left");
+              let walkLeftAnimKey = "passenger_walk_left";
+              if (passenger.id === "grandma") {
+                walkLeftAnimKey = "grandma_walk_left";
+              } else if (passenger.id === "man") {
+                walkLeftAnimKey = "mrlane_walk_left";
+              } else if (passenger.id === "kid") {
+                walkLeftAnimKey = "girl_walk_left";
+              } else if (passenger.id === "dog") {
+                walkLeftAnimKey = "busi_walk_left";
+              }
+              sprite.play(walkLeftAnimKey);
             }
             
             // Step 3: Walk horizontally to final seat position (MUCH SLOWER)
@@ -336,7 +404,17 @@ export default class Pickup extends Phaser.Scene {
                 this.game.sfx.seat();
                 
                 // Change to idle animation
-                sprite.play("passenger_idle_down");
+                let idleAnimKey = "passenger_idle_down";
+                if (passenger.id === "grandma") {
+                  idleAnimKey = "grandma_idle_down";
+                } else if (passenger.id === "man") {
+                  idleAnimKey = "mrlane_idle_down";
+                } else if (passenger.id === "kid") {
+                  idleAnimKey = "girl_idle_down";
+                } else if (passenger.id === "dog") {
+                  idleAnimKey = "busi_idle_down";
+                }
+                sprite.play(idleAnimKey);
                 
                 this.boardedPassengers.push(passenger);
                 this.passengersBoardedThisStop++;
