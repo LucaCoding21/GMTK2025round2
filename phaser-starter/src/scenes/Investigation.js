@@ -499,10 +499,14 @@ export default class Investigation extends Phaser.Scene {
   }
   
   update(){
-    // Driver movement
+    // Driver movement with collision detection
     const speed = 100;
     let isMoving = false;
     let direction = "right"; // Default direction
+    
+    // Store original position for collision checking
+    const originalX = this.driver.x;
+    const originalY = this.driver.y;
     
     if(this.cursors.left.isDown){
       this.driver.x -= speed * this.game.loop.delta / 1000;
@@ -523,6 +527,29 @@ export default class Investigation extends Phaser.Scene {
       this.driver.y += speed * this.game.loop.delta / 1000;
       direction = "down";
       isMoving = true;
+    }
+    
+    // Check collision with passengers
+    if (isMoving) {
+      let collision = false;
+      const driverBounds = this.driver.getBounds();
+      
+      // Check each passenger for collision
+      this.passengerSprites.forEach(passenger => {
+        const passengerBounds = passenger.getBounds();
+        
+        // Check if driver bounds overlap with passenger bounds
+        if (Phaser.Geom.Rectangle.Overlaps(driverBounds, passengerBounds)) {
+          collision = true;
+        }
+      });
+      
+      // If collision detected, revert to original position
+      if (collision) {
+        this.driver.x = originalX;
+        this.driver.y = originalY;
+        isMoving = false;
+      }
     }
     
     // Update driver animation based on direction and movement
